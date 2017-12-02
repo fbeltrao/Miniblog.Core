@@ -21,7 +21,12 @@ namespace Miniblog.Core.Services
 
         public FileBlogService(IHostingEnvironment env, IHttpContextAccessor contextAccessor)
         {
-            _folder = Path.Combine(env.WebRootPath, "Posts");
+            // We will mount /app/data in docker/k8s
+            var mountedPath = "/app/data";
+            if (Directory.Exists(mountedPath))
+                _folder = Path.Combine(mountedPath, "Posts");
+            else
+                _folder = Path.Combine(env.WebRootPath, "Posts");
             _contextAccessor = contextAccessor;
 
             Initialize();

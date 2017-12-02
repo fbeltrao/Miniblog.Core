@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Miniblog.Core.Services;
+using System;
 using WebEssentials.AspNetCore.OutputCaching;
+using WebEssentials.AspNetCore.Pwa;
 using WebMarkupMin.AspNetCore2;
 using WebMarkupMin.Core;
 using WilderMinds.MetaWeblog;
@@ -44,17 +47,59 @@ namespace Miniblog.Core
         {
             services.AddMvc();
 
-            services.AddSingleton<IUserServices, BlogUserServices>();
-            services.AddSingleton<IBlogService, FileBlogService>();
-            services.Configure<BlogSettings>(Configuration.GetSection("blog"));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMetaWeblog<MetaWeblogService>();
+            services.AddScoped<IUserServices, BlogUserServices>();
+            services.AddSingleton<IBlogService, FileBlogService>();
+
+            WebManifest dynamicWebManifest = null;
+            // setting up BlogSettings from environment variables for Docker images
+            if (EnvironmentVariablesBlogSettings.TryGet(Environment.GetEnvironmentVariables(), out var settings))
+            {
+                services.AddSingleton<IOptionsSnapshot<BlogSettings>>(settings);
+
+                WebManifest webManifest = new WebManifest()
+                {
+                    Name = settings.Value.Name,
+                    Description = settings.Value.Description,
+                    ShortName = settings.Value.ShortName,
+                    BackgroundColor = "#fff",
+                    ThemeColor = "#fff",
+                    StartUrl = "/",
+                    Display = "standalone",
+                    Icons = new Icon[]
+                    {
+                        new Icon()
+                        {
+                            Src = "/img/icon192x192.png",
+                            Sizes = "192x192"
+                        },
+                        new Icon()
+                        {
+                            Src = "/img/icon512x512.png",
+                            Sizes = "512x512"
+                        }
+                    } 
+                };
+
+                if (webManifest.IsValid(out var webManifestError))
+                    dynamicWebManifest = webManifest;
+            }
+            else
+            {
+                services.Configure<BlogSettings>(Configuration.GetSection("blog"));
+            }
 
             // Progressive Web Apps https://github.com/madskristensen/WebEssentials.AspNetCore.ServiceWorker
             services.AddProgressiveWebApp(new WebEssentials.AspNetCore.Pwa.PwaOptions
             {
-                OfflineRoute = "/shared/offline/"
+                OfflineRoute = "/shared/offline/",
             });
+
+            // Overwrite manifest di from services.AddProgressiveWebApp
+            // Using our web manifest instead of the one based on the static file
+            if (dynamicWebManifest != null)
+                services.AddSingleton(typeof(WebManifest), dynamicWebManifest);
 
             // Output caching (https://github.com/madskristensen/WebEssentials.AspNetCore.OutputCaching)
             services.AddOutputCaching(options =>
