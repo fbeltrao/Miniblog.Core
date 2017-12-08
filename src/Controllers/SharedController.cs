@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using WebEssentials.AspNetCore.Pwa;
 
 namespace Miniblog.Core.Controllers
 {
     public class SharedController : Controller
     {
-        private readonly WebManifest _webManifest;
-
-        public SharedController(WebManifest webManifest)
-        {
-            this._webManifest = webManifest;
+        public SharedController()
+        {  
         }
 
         public IActionResult Error()
@@ -24,12 +23,5 @@ namespace Miniblog.Core.Controllers
         {
             return View();
         }
-
-        [Route("/manifest.json")]
-        public IActionResult WebManifest()
-        {
-            return Json(this._webManifest);
-        }
-        
     }
 }

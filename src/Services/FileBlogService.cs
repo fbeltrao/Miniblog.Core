@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Miniblog.Core.Models;
 
 namespace Miniblog.Core.Services
@@ -19,14 +20,21 @@ namespace Miniblog.Core.Services
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly string _folder;
 
-        public FileBlogService(IHostingEnvironment env, IHttpContextAccessor contextAccessor)
+        public FileBlogService(IHostingEnvironment env, IHttpContextAccessor contextAccessor, ILogger<FileBlogService> logger)
         {
             // We will mount /app/data in docker/k8s
             var mountedPath = "/app/data";
             if (Directory.Exists(mountedPath))
+            {
+                logger.LogInformation("Using mounted path '/app/data' for data");
                 _folder = Path.Combine(mountedPath, "Posts");
+            }
             else
+            {
+                logger.LogInformation("Using 'wwwroot/Posts' for data");
+
                 _folder = Path.Combine(env.WebRootPath, "Posts");
+            }
             _contextAccessor = contextAccessor;
 
             Initialize();

@@ -4,18 +4,17 @@ services:
   miniblog.core:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - mb-owner=Francisco Beltrao
-      - mb-commentsclosefterdays=10
-      - mb-postsperpage=100
-      - mb-username=dockeradmin
-      - mb-pwdsalt=miniblog
-      - mb-pwdhash=95A805872297C29689F1837697986D52F761FDF771211C3B9E981271A291D16D
-      - mb-name=Docker Blog
-      - mb-shortname=Miniblog in a container
-      - mb-description=Hosting Miniblog in a container
+      - owner=From environment variable
+      - commentscloseafterdays=15
+      - postsperpage=100
+      - user:username=dockeradmin
+      - user:salt=miniblog
+      - user:password=95A805872297C29689F1837697986D52F761FDF771211C3B9E981271A291D16D
+      - blog:name=Docker Blog
+      - blog:shortname=Miniblog in a container
+      - blog:description=Hosting Miniblog in a container
     ports:
       - "80"
     #using volumes "path in host os":"path in container"
     volumes: 
-      # windows version: make sure the folder d:/dev/projects/Miniblog.Core/miniblog-datavolume exists on your windows environment
-      - d:/dev/projects/Miniblog.Core/miniblog-datavolume:/app/data
+      - ./miniblog-datavolume:/app/data

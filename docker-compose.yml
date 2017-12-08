@@ -4,5 +4,5 @@ services:
   miniblog.core:
     image: miniblog.core
     build:
-      context: .
-      dockerfile: src/Dockerfile
+      context: ./src
+      dockerfile: Dockerfile
