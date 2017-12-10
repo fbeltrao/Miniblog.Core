@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<post>
+  <title>From Docker</title>
+  <slug>from-docker</slug>
+  <pubDate>2017-11-29 10:00:24</pubDate>
+  <lastModified>2017-12-10 15:00:56</lastModified>
+  <excerpt>You should only see this post when running with docker using mounted volume</excerpt>
+  <content>&lt;p&gt;This post should only be visible if you are debugging your application with Docker!&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;</content>
+  <ispublished>true</ispublished>
+  <categories>
+    <category>docker</category>
+  </categories>
+  <comments></comments>
+</post>
