@@ -1,25 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <post>
-  <title>Test post</title>
-  <slug>testpost</slug>
+  <title>From Docker</title>
+  <slug>from-docker</slug>
   <pubDate>2017-11-29 10:00:24</pubDate>
-  <lastModified>2017-11-29 10:07:49</lastModified>
-  <excerpt>Useless information</excerpt>
-  <content>&lt;p&gt;A Title&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;if (i &amp;gt; 10) {&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;}&lt;/code&gt;&lt;/p&gt;</content>
+  <lastModified>2017-12-10 15:00:56</lastModified>
+  <excerpt>You should only see this post when running with docker using mounted volume</excerpt>
+  <content>&lt;p&gt;This post should only be visible if you are debugging your application with Docker!&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;</content>
   <ispublished>true</ispublished>
   <categories>
-    <category>test</category>
-    <category>post</category>
-    <category>useless</category>
+    <category>docker</category>
   </categories>
-  <comments>
-    <comment isAdmin="false" id="12435097-f5ae-42db-af76-1beeae67b00c">
-      <author>my name</author>
-      <email>m@outlook.com</email>
-      <date>2017-11-29 10:7:49</date>
-      <content>my comment</content>
-    </comment>
-  </comments>
+  <comments></comments>
 </post>
